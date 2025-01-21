@@ -1,9 +1,9 @@
 
 import json, os
-from extract_keys_recursive import get_keys
+from extract_keys_recursive import get_keys, search_keys
 from constants import *
 
-def process_files(input_directory):
+def process_files(input_directory, output_file_ptr, search_json, search_key):
     files_in_input_directory = os.listdir(input_directory)
     print ("Total files to process = {}".format(len(files_in_input_directory)))
 
@@ -21,7 +21,10 @@ def process_files(input_directory):
             file_name_to_process = input_directory + each_file
             with open (file_name_to_process) as json_file:
                 json_data = json.load(json_file)
-                all_json_keys = get_keys(json_data, all_json_keys)
+                if search_json:
+                    all_json_keys = search_keys(search_key, each_file, json_data, all_json_keys)
+                else:
+                    all_json_keys = get_keys(json_data, all_json_keys)
         except Exception as e:
             print ("Error while processing file - {}".format(file_name_to_process))
             print ("Error message               - {}".format(e))
@@ -31,12 +34,15 @@ def process_files(input_directory):
 
     # print ("2. All Keys till here - {}".format(len(all_json_keys)))
 
-    distinct_keys = set(all_json_keys)
-    sorted_distinct_keys = sorted(distinct_keys)
-    print ("Total Distinct Keys - {}".format(len(sorted_distinct_keys)))
+    if search_json:
+        pass
+    else:
+        distinct_keys = set(all_json_keys)
+        sorted_distinct_keys = sorted(distinct_keys)
+        print ("Total Distinct Keys - {}".format(len(sorted_distinct_keys)))
 
-    output_file_ptr = open('output/EMEA_All_Keys.txt', 'w')
-    for each_key in sorted_distinct_keys:
-        print (each_key, file=output_file_ptr, end='\n')
+        # output_file_ptr = open('output/EMEA_All_Keys.txt', 'w')
+        for each_key in sorted_distinct_keys:
+            print (each_key, file=output_file_ptr, end='\n')
 
 
