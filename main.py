@@ -13,6 +13,9 @@ from load_json import process_files
 
 
 if __name__ == '__main__':
+    #
+    # read and process arguments
+    #
     argument_parser = argparse.ArgumentParser(description='Json parser, to get unique keys across multiple jsons')
     argument_parser.add_argument('--dir', 
                                 type=str, 
