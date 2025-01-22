@@ -3,7 +3,7 @@ import json, os
 from extract_keys_recursive import get_keys, search_keys
 from constants import *
 
-def process_files(input_directory, output_file_ptr, search_json, search_key):
+def process_files(input_directory, output_file_ptr, search_json, search_key, expand_json):
     files_in_input_directory = os.listdir(input_directory)
     print ("Total files to process = {}".format(len(files_in_input_directory)))
 
@@ -23,7 +23,7 @@ def process_files(input_directory, output_file_ptr, search_json, search_key):
                 json_data = json.load(json_file)
                 if search_json:
                     all_json_keys = search_keys(search_key, each_file, json_data, all_json_keys)
-                else:
+                elif expand_json:
                     all_json_keys = get_keys(json_data, all_json_keys)
         except Exception as e:
             print ("Error while processing file - {}".format(file_name_to_process))
@@ -36,7 +36,7 @@ def process_files(input_directory, output_file_ptr, search_json, search_key):
 
     if search_json:
         pass
-    else:
+    elif expand_json:
         distinct_keys = set(all_json_keys)
         sorted_distinct_keys = sorted(distinct_keys)
         print ("Total Distinct Keys - {}".format(len(sorted_distinct_keys)))
